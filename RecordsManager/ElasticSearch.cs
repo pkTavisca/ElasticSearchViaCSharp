@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 
@@ -10,6 +11,7 @@ namespace RecordsManager
     {
         private string _ip = "172.16.14.171";
         private int _port = 9200;
+        private string _uri;
 
         TcpClient esService;
 
@@ -17,13 +19,28 @@ namespace RecordsManager
         {
             esService = new TcpClient();
             esService.ConnectAsync(IPAddress.Parse(_ip), _port).GetAwaiter().GetResult();
+            _uri = $"http://{_ip}:{_port}";
         }
 
-        public string GetInititalString()
+        public string GetInitialString()
         {
-            WebRequest webRequest = HttpWebRequest.Create($"http://{_ip}:{_port}");
-            WebResponse webResponse = webRequest.GetResponseAsync().GetAwaiter().GetResult();
-            var streamReader = new StreamReader(webResponse.GetResponseStream());
+            WebRequest request = HttpWebRequest.Create($"http://{_ip}:{_port}");
+            WebResponse response = request.GetResponseAsync().GetAwaiter().GetResult();
+            var streamReader = new StreamReader(response.GetResponseStream());
+            return streamReader.ReadToEnd();
+        }
+
+        public string ExecuteQuery(string query)
+        {
+            WebRequest request = HttpWebRequest.Create($"http://{_ip}:{_port}");
+            request.Method = "GET";
+            if (request.Method.ToUpperInvariant().Equals("POST"))
+                request.ContentType = "application/json";
+            Stream outgoingStream = request.GetRequestStreamAsync().GetAwaiter().GetResult();
+            outgoingStream.Write(Encoding.ASCII.GetBytes(query), 0, query.Length);
+            WebResponse response = request.GetResponseAsync().GetAwaiter().GetResult();
+            var streamReader = new StreamReader(response.GetResponseStream());
+
             return streamReader.ReadToEnd();
         }
     }

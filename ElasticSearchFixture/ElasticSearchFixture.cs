@@ -16,8 +16,18 @@ namespace ElasticSearchFixture
         public void ESShouldReturnADefaultString()
         {
             ElasticSearch elasticSearch = new ElasticSearch();
-            string s = elasticSearch.GetInititalString();
-            Assert.Contains("pps", s);
+            string s = elasticSearch.GetInitialString();
+            Assert.Contains("cluster_name", s);
+            Assert.Contains("cluster_uuid", s);
+            Assert.Contains("version", s);
+        }
+
+        [Fact]
+        public void ExecuteQueryFixture()
+        {
+            ElasticSearch elasticSearch = new ElasticSearch();
+            string query = "{\"query\": { }}";
+            string result = elasticSearch.ExecuteQuery(query);
         }
     }
 }
