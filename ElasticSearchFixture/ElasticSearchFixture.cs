@@ -29,5 +29,13 @@ namespace ElasticSearchFixture
             string query = "{\"query\": { }}";
             string result = elasticSearch.ExecuteQuery(query);
         }
+
+        [Fact]
+        public void AddDocumentFixture()
+        {
+            ElasticSearch elasticSearch = new ElasticSearch();
+            string result = elasticSearch.AddDocument("testing", "external", "{\"data1\":\"somedata\"}");
+            Assert.Contains("_id", result);
+        }
     }
 }

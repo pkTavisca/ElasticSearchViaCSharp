@@ -22,6 +22,18 @@ namespace RecordsManager
             _client = new ElasticClient(settings);
         }
 
+        public IIndexResponse Index(Document document)
+        {
+            var response = _client.Index(document, x => x.Index("dataindex"));
+            return response;
+        }
+
+        public Document GetDocuments(string index)
+        {
+            var response = _client.Get<Document>(1, x => x.Index(index));
+            return response.Source;
+        }
+
 
     }
 }

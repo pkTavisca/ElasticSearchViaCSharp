@@ -11,5 +11,22 @@ namespace ElasticSearchFixture
             NestElasticSearch nestElasticSearch = new NestElasticSearch();
             nestElasticSearch.InitializeConnection();
         }
+
+        [Fact]
+        public void RetrievingDocuments()
+        {
+            NestElasticSearch nestElasticSearch = new NestElasticSearch();
+            nestElasticSearch.InitializeConnection();
+            var response = nestElasticSearch.GetDocuments("");
+        }
+
+        [Fact]
+        public void PutDocument()
+        {
+            NestElasticSearch nestElasticSearch = new NestElasticSearch();
+            nestElasticSearch.InitializeConnection();
+            Document document = new Document() { Id = 2, Name = "qwqwqwqw" };
+            var response = nestElasticSearch.Index(document);
+        }
     }
 }

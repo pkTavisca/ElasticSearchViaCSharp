@@ -43,5 +43,17 @@ namespace RecordsManager
 
             return streamReader.ReadToEnd();
         }
+
+        public string AddDocument(string index, string type, string data, string id = "")
+        {
+            WebRequest request = HttpWebRequest.Create($"http://{_ip}:{_port}/{index}/{type}/{id}");
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            Stream outgoingStream = request.GetRequestStreamAsync().GetAwaiter().GetResult();
+            outgoingStream.Write(Encoding.ASCII.GetBytes(data), 0, data.Length);
+            WebResponse response = request.GetResponseAsync().GetAwaiter().GetResult();
+            var streamReader = new StreamReader(response.GetResponseStream());
+            return streamReader.ReadToEnd();
+        }
     }
 }
