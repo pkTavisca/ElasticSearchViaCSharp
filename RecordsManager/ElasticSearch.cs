@@ -55,5 +55,15 @@ namespace RecordsManager
             var streamReader = new StreamReader(response.GetResponseStream());
             return streamReader.ReadToEnd();
         }
+
+        public string RemoveDocument(string index, string type, string id)
+        {
+            WebRequest request = HttpWebRequest.Create($"http://{_ip}:{_port}/{index}/{type}/{id}");
+            request.Method = "DELETE";
+            request.ContentType = "application/json";
+            WebResponse response = request.GetResponseAsync().GetAwaiter().GetResult();
+            var streamReader = new StreamReader(response.GetResponseStream());
+            return streamReader.ReadToEnd();
+        }
     }
 }
