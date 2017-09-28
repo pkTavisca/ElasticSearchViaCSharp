@@ -65,5 +65,11 @@ namespace RecordsManager
             var streamReader = new StreamReader(response.GetResponseStream());
             return streamReader.ReadToEnd();
         }
+
+        public string UpdateDocument(string index, string type, string data, string id)
+        {
+            RemoveDocument(index, type, id);
+            return AddDocument(index, type, data, id);
+        }
     }
 }
